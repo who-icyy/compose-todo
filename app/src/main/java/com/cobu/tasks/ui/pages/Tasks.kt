@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
+val iftasks = false
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Tasks(){
@@ -39,7 +41,6 @@ fun Tasks(){
             }
         }
     ) { innerPadding ->
-        // Screen content goes here, using innerPadding if needed
         Text("Hello, world!", modifier = Modifier.padding(innerPadding))
     }
 }
