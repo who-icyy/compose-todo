@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.room.Room
 import com.cobu.tasks.db.TaskDatabase
+import com.cobu.tasks.db.Tasks
 import com.cobu.tasks.ui.theme.TasksTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     lateinit var database :TaskDatabase
@@ -29,8 +32,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        database = Room.databaseBuilder(this, TaskDatabase::class.java, "tasks").build()
+        database = TaskDatabase.getDatabase(this)
 
+        GlobalScope.launch {
+            database.taskDao().insertTask(Tasks(0,"Breakfast", false))
+        }
     }
 }
 
