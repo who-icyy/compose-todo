@@ -17,7 +17,7 @@ abstract class TaskDatabase : RoomDatabase() {
         fun getDatabase(context: Context) : TaskDatabase{
             if (INSTANCE==null){
                 synchronized(this){
-                INSTANCE = Room.databaseBuilder(this, TaskDatabase::class.java, "tasks")
+                INSTANCE = Room.databaseBuilder(context.applicationContext, TaskDatabase::class.java, "tasks")
                     .build()
                     }
             }
