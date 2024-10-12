@@ -17,7 +17,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    lateinit var database :TaskDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -31,11 +30,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-        database = TaskDatabase.getDatabase(this)
-
-        GlobalScope.launch {
-            database.taskDao().insertTask(Tasks(0,"Breakfast", false))
         }
     }
 }
