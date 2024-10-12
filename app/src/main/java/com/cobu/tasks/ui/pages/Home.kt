@@ -1,10 +1,15 @@
+import android.app.Dialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.TextField
+import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -14,15 +19,27 @@ fun ToDoListApp() {
             TopAppBar(
                 title = { Text("To-Do List") }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+
+            }) {
+                Icon(Icons.Default.Add, contentDescription = "Add") // You can use an icon here
+            }
         }
     ) { paddingValues ->
-        ToDoListContent(modifier = Modifier.padding(paddingValues))
+        ToDoListContent(
+            modifier = Modifier.padding(paddingValues),
+            onAddTask = { showDialog ->
+                // Update logic to show the dialog
+                showDialog.value = true
+            }
+        )
     }
 }
 
 @Composable
-fun ToDoListContent(modifier: Modifier = Modifier) {
-    // Using mutableStateListOf to manage the task list state
+fun ToDoListContent(modifier: Modifier = Modifier, onAddTask: (MutableState<Boolean>) -> Unit) {
     val tasks = remember {
         mutableStateListOf(
             mutableMapOf("task" to "Buy groceries", "is_completed" to false),
@@ -30,6 +47,44 @@ fun ToDoListContent(modifier: Modifier = Modifier) {
             mutableMapOf("task" to "Clean the house", "is_completed" to false),
             mutableMapOf("task" to "Prepare dinner", "is_completed" to true),
             mutableMapOf("task" to "Read a book", "is_completed" to false)
+        )
+    }
+
+    val showDialog = remember { mutableStateOf(false) }
+    var newTask by remember { mutableStateOf("") }
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("Add New Task") },
+            text = {
+                Column {
+                    TextField(
+                        value = newTask,
+                        onValueChange = { newTask = it },
+                        label = { Text("Task Name") }
+                    )
+                }
+            },
+            confirmButton = {
+                ElevatedButton(
+                    onClick = {
+                        if (newTask.isNotBlank()) {
+                            // Add new task to the list
+                            tasks.add(mutableMapOf("task" to newTask, "is_completed" to false))
+                            newTask = ""
+                            showDialog.value = false
+                        }
+                    }
+                ) {
+                    Text("Add")
+                }
+            },
+            dismissButton = {
+                ElevatedButton(onClick = { showDialog.value = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 
@@ -51,6 +106,15 @@ fun ToDoListContent(modifier: Modifier = Modifier) {
                 }
             )
         }
+    }
+
+    // Logic to show the dialog when FAB is clicked
+    FloatingActionButton(
+        onClick = { onAddTask(showDialog) },
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        Text("+") // You can replace this with an icon
     }
 }
 
