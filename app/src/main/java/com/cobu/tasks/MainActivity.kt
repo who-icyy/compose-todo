@@ -1,6 +1,6 @@
 package com.cobu.tasks
 
-import ToDoListApp
+import com.cobu.tasks.ui.pages.ToDoListApp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
